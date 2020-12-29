@@ -19,13 +19,23 @@ function cacheDecorator(func){
         let user = cacheUsers.find((item, index, array)=> item.id == id);
         if(!user){
             user = func(id);
+            user.from = 'db';
             cacheUsers.push(user)
         }
+        else
+            user.from = 'cache';
         return user;
     }
 }
 
-let cache = cacheDecorator(getUser);
+let cache1 = cacheDecorator(getUser);
+let cache2 = cacheDecorator(getUser);
 
-let user = cache(1);
-console.log(user.name);
+let user = cache1(1);
+console.log(`${user.name} - ${user.from}`);
+
+user = cache1(1);
+console.log(`${user.name} - ${user.from}`);
+
+user = cache2(1);
+console.log(`${user.name} - ${user.from}`);
